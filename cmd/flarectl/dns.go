@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cloudflare/cloudflare-go"
+	"github.com/highwire/cloudflare-go"
 	"github.com/urfave/cli"
 )
 

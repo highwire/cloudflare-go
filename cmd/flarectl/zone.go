@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/highwire/cloudflare-go"
 	"github.com/urfave/cli"
 )
 

@@ -7,7 +7,7 @@ A CLI application for interacting with a Cloudflare account. Powered by [cloudfl
 Install it when you install our command-line library:
 
 ```sh
-go get -u github.com/cloudflare/cloudflare-go/...
+go get -u github.com/highwire/cloudflare-go/...
 ```
 
 # Usage
