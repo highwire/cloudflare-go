@@ -3,7 +3,7 @@ package cloudflare_test
 import (
 	"fmt"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/highwire/cloudflare-go"
 )
 
 const (

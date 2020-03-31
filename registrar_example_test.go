@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/highwire/cloudflare-go"
 )
 
 var (
