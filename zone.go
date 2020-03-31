@@ -355,10 +355,11 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 func (api *API) ListZones(z ...string) ([]Zone, error) {
 	v := url.Values{}
 	var res []byte
-	var r ZonesResponse
 	var zones []Zone
+	var zonesmu = &sync.Mutex{}
 	var err error
 	if len(z) > 0 {
+		var r ZonesResponse
 		for _, zone := range z {
 			v.Set("name", normalizeZoneName(zone))
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
@@ -374,10 +375,13 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 				return []Zone{}, err
 			}
 			for zi := range r.Result {
+				zonesmu.Lock()
 				zones = append(zones, r.Result[zi])
+				zonesmu.Unlock()
 			}
 		}
 	} else {
+		var r ZonesResponse
 		res, err = api.makeRequest("GET", "/zones?per_page=50", nil)
 		if err != nil {
 			return []Zone{}, errors.Wrap(err, errMakeRequestError)
@@ -394,7 +398,8 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 
 		for i := 1; i <= totalPageCount; i++ {
 			go func(pageNumber int) error {
-				res, err = api.makeRequest("GET", fmt.Sprintf("/zones?per_page=50&page=%d", pageNumber), nil)
+				var r ZonesResponse
+				res, err := api.makeRequest("GET", fmt.Sprintf("/zones?per_page=50&page=%d", pageNumber), nil)
 				if err != nil {
 					errc <- err
 				}
@@ -405,7 +410,9 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 				}
 
 				for _, zone := range r.Result {
+					zonesmu.Lock()
 					zones = append(zones, zone)
+					zonesmu.Unlock()
 				}
 
 				select {
